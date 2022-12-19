@@ -5,10 +5,7 @@ import com.coding.burger.services.BurgerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -32,9 +29,26 @@ public class BurgerController {
         if(result.hasErrors()){
             model.addAttribute("burgers", burgerService.findAllBurgers());
             return "index.jsp";
-        }else{
-        burgerService.createBurger(burger);
-        return "redirect:/";
+        }else {
+            burgerService.createBurger(burger);
+            return "redirect:/";
+        }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id")Long id, @ModelAttribute("burger")Burger burger, Model model){
+        model.addAttribute("burger", burgerService.findOneBurger(id));
+        return "edit.jsp";
+    }
+
+    @PutMapping("/edit/{id}")
+    public String update(@Valid @ModelAttribute("burger")Burger burger, BindingResult result){
+        if(result.hasErrors()){
+            return "/edit.jsp";
+        }
+        else{
+            burgerService.updateBurger(burger);
+            return"redirect:/";
         }
     }
 }

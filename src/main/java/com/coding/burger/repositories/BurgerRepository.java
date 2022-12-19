@@ -10,4 +10,6 @@ import java.util.List;
 public interface BurgerRepository extends CrudRepository <Burger, Long> {
 
     List<Burger> findAll();
+
+
 }
